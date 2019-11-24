@@ -27,3 +27,5 @@ décommentez la ligne 161 et commentez la ligns 162 pour conserver le fichier de
 
 
 ## A NOTER QU'UN DOSSIER "fichiers" DOIT SE TROUVER AU SEIN DU PROJET POUR STOCKER LES FICHIERS
+
+####Projet fait à la "va vite" 😅 donc forcément pas optimisé 😑
