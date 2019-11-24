@@ -1,0 +1,51 @@
+# depslib dependency file v1.0
+1574107236 source:c:\users\diouf\desktop\ecole\main.cpp
+	<iostream>
+	<cstdlib>
+	"ecole.h"
+
+1574107304 c:\users\diouf\desktop\ecole\ecole.h
+	<string>
+
+1574106222 source:c:\users\diouf\desktop\ecole\ecole.cpp
+	<iostream>
+	<cstdlib>
+	"ecole.h"
+
+1574571510 source:d:\isi\licence iii 2019_2020\c++\cend_projet-c++\ecole\main.cpp
+	<iostream>
+	<cstdlib>
+	"ecole.h"
+	<vector>
+
+1574571004 d:\isi\licence iii 2019_2020\c++\cend_projet-c++\ecole\ecole.h
+	<string>
+	<vector>
+
+1574571524 source:d:\isi\licence iii 2019_2020\c++\cend_projet-c++\ecole\ecole.cpp
+	<iostream>
+	<cstdlib>
+	"ecole.h"
+	<vector>
+
+1574628140 source:d:\isi\licence iii 2019_2020\c++\cend_project_c++\ecole\main.cpp
+	<iostream>
+	<cstdlib>
+	"ecole.h"
+	<vector>
+	<fstream>
+
+1574628479 d:\isi\licence iii 2019_2020\c++\cend_project_c++\ecole\ecole.h
+	<string>
+	<vector>
+	<cstdlib>
+	<sstream>
+
+1574630761 source:d:\isi\licence iii 2019_2020\c++\cend_project_c++\ecole\ecole.cpp
+	<iostream>
+	<cstdlib>
+	"ecole.h"
+	<vector>
+	<sstream>
+	<fstream>
+
