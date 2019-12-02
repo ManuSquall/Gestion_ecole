@@ -10,10 +10,6 @@
 using namespace std;
 
 
-//string const fichierId= "C:/squall/fichierId.txt";
-//string const fichierClasse= "C:/squall/fichierClasse.txt";
-//string const fichierEtudiant= "C:/squall/fichierEtudiant.txt";
-
 
 string const fichierId= "fichiers/fichierId.txt";
 string const fichierClasse= "fichiers/fichierClasse.txt";
@@ -36,16 +32,105 @@ struct Etudiant{
     Classe classe;
 };
 
+//#############################################
+
+//namespace liste{
+
+// redefinition de structure
+    typedef struct eltmono * elementmono;
+    typedef struct eltmono eltmono;
+    typedef struct eltbi * elementbi;
+    typedef struct eltbi eltbi;
+
+    struct eltmono{
+        Classe info;
+        elementmono next;
+    };
+    struct eltbi{
+        Etudiant info;
+        elementbi next;
+        elementbi prec;
+    };
+
+/*
+class liste{
+
+    protected:
+        int taille;
+
+
+    public:
+        liste() {};
+        //~liste(){};
+        virtual void initialise()=0;
+        virtual void add(int nbr);
+        /*virtual bool deleteOne(int pos);
+        virtual bool deleteAll(int val);
+        virtual int get(int pos);
+        virtual int get(int * val);
+        virtual void add(int nbr, int pos);
+        virtual void show();
+        virtual bool isVide()=0;
+
+};
+*/
+
+
+class listemono{
+public:
+    elementmono T, Q;
+    int taille;
+
+public:
+    void initialise();
+    bool isVide();
+    void add(Classe c);
+    void show();
+    listemono();
+    ~listemono();
+
+};
+
+
+
+
+class listebi{
+
+public:
+    elementbi T, Q;
+    int taille;
+public:
+    void initialise();
+    bool isVide();
+    void add(Etudiant e);
+    void show();
+    listebi();
+    ~listebi();
+};
+
+
+//}
+
+
+
+//string const fichierId= "C:/squall/fichierId.txt";
+//string const fichierClasse= "C:/squall/fichierClasse.txt";
+//string const fichierEtudiant= "C:/squall/fichierEtudiant.txt";
+
+
 int menu();
 Classe saisirClasse();
-void afficherTabClasses(vector<Classe> &vecClasse);
-void ajoutClasse(vector<Classe> &vecClasse);
+void ajoutClasse(listemono * lm);
+void saveFileClasse(elementmono T, elementmono Q);
+void afficherTabClasses(listemono * lm);
 void afficherClasse(Classe cl);
-void ajouterEtudiant(vector<Etudiant> &vecEtudiant, Etudiant e);
-Etudiant saisirEtudiant(vector<Classe> &vecClasse);
-void afficheEtudiantsParClasse(vector<Etudiant> &vecEtudiant, Classe cl);
+Etudiant saisirEtudiant(listemono * lm);
+void ajouterEtudiant(listebi * lb, Etudiant e);
+void afficheEtudiantsParClasse(listebi * lb, Classe cl);
 void afficherEtudiant(Etudiant e) ;
-void afficheClasseCroissant(vector<Classe> &vecClasse);
+
+
+void afficheClasseCroissant(listemono * lm);
 
 
 void initialiserId();
@@ -55,8 +140,14 @@ void setIdClass(int i);
 void setIdEtu(int i);
 
 
-void saveFileEtudiant(vector<Etudiant> &vecEtudiant);
-void saveFileClasse(vector<Classe> &vecClasse);
+void saveFileEtudiant(elementbi T);
+
+//##########################################
+
+Classe getclassebyid(listemono * lm, int idcl);
+
+
+//###############################################################
 
 
 

@@ -5,6 +5,9 @@
 #include <fstream>
 
 using namespace std;
+//using namespace liste;
+
+
 enum CASE{
     AJOUTCLASSE=1,
     LISTECLASSE,
@@ -18,6 +21,15 @@ enum CASE{
 
 
 int main() {
+
+    listemono * lm = new listemono();
+    listebi * lb = new listebi();
+
+    lm->initialise();
+    lb->initialise();
+
+
+
 
     // initialiser les id
     initialiserId();
@@ -36,21 +48,25 @@ int main() {
             /***********************************************************************/
             system("cls");
             cout << "------------- AJOUTER UNE CLASSE -------------" << endl;
-            ajoutClasse(vecClasse);
-            saveFileClasse(vecClasse);
+            ajoutClasse(lm);
+            saveFileClasse(lm->T, lm->Q);
             system("pause");
             break;
             /************************************************************************/
         case LISTECLASSE :
             system("cls");
             cout << "------------- LISTE DES CLASSES -------------" << endl;
-            afficherTabClasses(vecClasse);
+            afficherTabClasses(lm);
             break;
         case AJOUTETUDIANT:
             system("cls");
             cout << "------------- AJOUTER UN ETUDIANT  -------------" << endl;
-            ajouterEtudiant(vecEtudiant, saisirEtudiant(vecClasse));
-            saveFileEtudiant(vecEtudiant);
+            if(lm->isVide()== false){
+            ajouterEtudiant(lb, saisirEtudiant(lm));
+            saveFileEtudiant(lb->T);
+            }else{
+            cout << "Vous n'avez pas encore créé de classe";
+            }
             system("pause");
             break;
 
@@ -59,11 +75,11 @@ int main() {
             cout << "------------- AFFICHER LISTE DES ETUDIANTS D UNE CLASSE -------------" << endl;
             int idClasse;
             do{
-                afficherTabClasses(vecClasse);
+                afficherTabClasses(lm);
                 cout << "Veuillez choisir un id de classe" << endl;
                 cin >> idClasse;
-            }while(idClasse <1 || idClasse > vecClasse.size());
-            afficheEtudiantsParClasse(vecEtudiant, vecClasse[idClasse-1]);
+            }while(idClasse <1 || idClasse > lm->taille);
+            afficheEtudiantsParClasse(lb, getclassebyid(lm, (idClasse)));
             system("pause");
             break;
 
@@ -71,7 +87,7 @@ int main() {
             system("cls");
             cout << "------------- AFFICHAGE DES CLASSES PAR ORDRE CROISSANT SUR L EFFECTIF -------------" << endl;
 
-             afficheClasseCroissant( vecClasse);
+             afficheClasseCroissant(lm);
             system("pause");
             break;
             //*/

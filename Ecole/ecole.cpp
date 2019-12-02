@@ -9,6 +9,7 @@ int g_idEtudiant = getIdEtudiant();
 
 
 using namespace std;
+//using namespace liste;
 
 
 ofstream oFichId;
@@ -60,16 +61,12 @@ Classe saisirClasse(){
     c.effectif = 0;
     return c;
 }
-void ajoutClasse(vector<Classe> &vecClasse){
-    vecClasse.push_back(saisirClasse());
+void ajoutClasse(listemono * lm){
+    lm->add(saisirClasse());
 
 }
-void afficherTabClasses(vector<Classe> &vecClasse) {
-    int i;
-    for(i=0; i<(vecClasse.size()); i++) {
-        afficherClasse(vecClasse[i]);
-        cout << "---------------------------------------------" << endl;
-    }
+void afficherTabClasses(listemono * lm) {
+    lm->show();
     system("pause");
 }
 void afficherClasse(Classe cl) {
@@ -77,10 +74,11 @@ void afficherClasse(Classe cl) {
     cout << "ID CLASSE : " << cl.id << endl;
     cout << "EFFECTIF CLASSE : " << cl.effectif << endl;
     cout << "EFFECTIF LIMITE DE La CLASSE : " << cl.seuilEffectif << endl;
+    cout << "---------------------------------------------" << endl;
 }
 
 
-Etudiant saisirEtudiant(vector<Classe> &vecClasse){
+Etudiant saisirEtudiant(listemono * lm){
     Etudiant e;
     int idClasse;
     e.id = ++g_idEtudiant;
@@ -99,27 +97,49 @@ Etudiant saisirEtudiant(vector<Classe> &vecClasse){
         }
     }while(e.age <=16);
     do{
-        afficherTabClasses(vecClasse);
+        afficherTabClasses(lm);
         cout << "Veuillez choisir un id de classe" << endl;
         cin >> idClasse;
-    }while(idClasse <1 || idClasse > vecClasse.size());
-    e.classe = vecClasse[idClasse-1];
-    vecClasse[idClasse-1].effectif++;
+    }while(idClasse <1 || idClasse > lm->taille);
+    e.classe = getclassebyid(lm, (idClasse));
+    //getclassebyid(lm, (idClasse-1)).effectif++;
+
+
+    // incrémenter l'effectif de la classe
+    elementmono p ;
+    p=lm->T;
+        while(p){
+            if((idClasse)== p->info.id)
+                p->info.effectif++;
+            p=p->next;
+        }
     return e;
 }
-void ajouterEtudiant(vector<Etudiant> &vecEtudiant, Etudiant e) {
-    vecEtudiant.push_back(e);
+
+void ajouterEtudiant(listebi * lb, Etudiant e) {
+    lb->add(e);
 }
 
-void afficheEtudiantsParClasse(vector<Etudiant> &vecEtudiant, Classe cl){
-    int i;
+void afficheEtudiantsParClasse(listebi * lb, Classe cl){
     bool isEmpty = true;
-    for(i=0; i<vecEtudiant.size(); i++) {
-        if(vecEtudiant[i].classe.id == cl.id) {
-            afficherEtudiant(vecEtudiant[i]);
-            cout << "------------------------------------------------" << endl;
-            isEmpty = false;
+
+
+    elementbi p;
+    if(lb->isVide()){
+        cout << "la liste est vide";
+    }else{
+        p=lb->T;
+        while(p){
+            if(cl.id==p->info.classe.id)
+            {
+                afficherEtudiant(p->info);
+                cout << "------------------------------------------------" << endl;
+                isEmpty = false;
+            }
+
+            p=p->next;
         }
+        cout <<endl;
     }
     if(isEmpty) {
         cout << "Aucun etudiant trouve pour cette classe" << endl;
@@ -128,22 +148,41 @@ void afficheEtudiantsParClasse(vector<Etudiant> &vecEtudiant, Classe cl){
 
 
 
-void afficheClasseCroissant(vector<Classe> &vecClasse){
+void afficheClasseCroissant(listemono * lm){
     Classe svg;
-    for(int i(0); i<(vecClasse.size()-1); i++){
-        for(int j(0); j<(vecClasse.size()-1); j++){
-            if(vecClasse[j].effectif > vecClasse[j+1].effectif){
-                svg = vecClasse[j];
-                vecClasse[j]=vecClasse[j+1];
-                vecClasse[j+1]=svg;
-            }
+    int i;
+    elementmono p, l;
+    if(lm->isVide()){
+        cout << "la liste est vide";
+    }else{
+        //cout << "squall";
+        p=lm->T;
+        while(p && p!=lm->Q){
+                l=lm->T;
+                 while(l && l!=lm->Q){
+
+                        if(l->info.effectif > l->next->info.effectif){
+                            svg = l->info;
+                            l->info=l->next->info;
+                            l->next->info=svg;
+                        }
+
+                    l=l->next;
+
+                }
+                //cout << "hors de l";
+            p=p->next;
         }
+        cout <<endl;
+
+
     }
 
-    afficherTabClasses(vecClasse);
+
+    afficherTabClasses(lm);
 
 }
-
+//*/
 
 
 
@@ -189,7 +228,8 @@ void initialiserId(){
 }
 
 int getIdClasse(){
-    ofstream fluxo1(fichierId.c_str(), ios::app);
+    //ofstream fluxo1(fichierId.c_str(), ios::app);
+    ofstream fluxo1(fichierId.c_str());
     ifstream fluxi1(fichierId.c_str());
     int a=0;
     if(fluxi1)
@@ -210,7 +250,8 @@ int getIdClasse(){
     return a;
 }
 int getIdEtudiant(){
-    ofstream fluxo1(fichierId.c_str(), ios::app);
+    //ofstream fluxo1(fichierId.c_str(), ios::app);
+    ofstream fluxo1(fichierId.c_str());
     ifstream fluxi1(fichierId.c_str());
     int b = 0;
     if(fluxi1)
@@ -306,23 +347,33 @@ void setIdEtu(int i){
 }
 
 
-void saveFileEtudiant(vector<Etudiant> &vecEtudiant){
+void saveFileEtudiant(elementbi T){
     //ofstream fluxo3(fichierEtudiant.c_str(), ios::app);
     ofstream fluxo3(fichierEtudiant.c_str());
     Etudiant e;
     if(fluxo3)
     {
-        int i;
-        for(i=0; i<vecEtudiant.size(); i++) {
-            e= vecEtudiant[i];
-            fluxo3 << "---------------------------------------"<<endl;
-            fluxo3 << "ID : " << e.id << endl;
-            fluxo3 << "NOM : " << e.nom << endl;
-            fluxo3 << "PRENOM : " << e.prenom << endl;
-            fluxo3 << "AGE : " << e.age << endl;
-            fluxo3 << "CLASSE : " << e.classe.libelle << endl;
-            fluxo3 << "---------------------------------------"<< endl;
-        }
+
+        elementbi p;
+            p=T;
+            while(p){
+                    e=p->info;
+                    fluxo3 << "---------------------------------------"<<endl;
+                    fluxo3 << "ID : " << e.id << endl;
+                    fluxo3 << "NOM : " << e.nom << endl;
+                    fluxo3 << "PRENOM : " << e.prenom << endl;
+                    fluxo3 << "AGE : " << e.age << endl;
+                    fluxo3 << "CLASSE : " << e.classe.libelle << endl;
+                    fluxo3 << "---------------------------------------"<< endl;
+                p=p->next;
+            }
+            cout <<endl;
+
+
+
+
+
+        //#####
         cout << "Etudiants enregistres dans le fichier: " <<fichierEtudiant <<endl;
     }
     else
@@ -333,22 +384,32 @@ void saveFileEtudiant(vector<Etudiant> &vecEtudiant){
 }
 
 
-void saveFileClasse(vector<Classe> &vecClasse){
+void saveFileClasse(elementmono T, elementmono Q){
     //ofstream fluxo2(fichierClasse.c_str(), ios::app);
     ofstream fluxo2(fichierClasse.c_str());
     Classe cl;
     if(fluxo2)
     {
-        int i;
-        for(i=0; i<vecClasse.size(); i++) {
-            cl= vecClasse[i];
-            fluxo2 << "---------------------------------------"<< endl;
-            fluxo2 << "CLASSE : " << cl.libelle << endl;
-            fluxo2 << "ID CLASSE : " << cl.id << endl;
-            fluxo2 << "EFFECTIF CLASSE : " << cl.effectif << endl;
-            fluxo2 << "EFFECTIF LIMITE DE La CLASSE : " << cl.seuilEffectif << endl;
-            fluxo2 << "---------------------------------------"<< endl;
-        }
+            elementmono p;
+            p=T;
+            while(p){
+                cl=p->info;
+
+
+                fluxo2 << "---------------------------------------"<< endl;
+                fluxo2 << "CLASSE : " << cl.libelle << endl;
+                fluxo2 << "ID CLASSE : " << cl.id << endl;
+                fluxo2 << "EFFECTIF CLASSE : " << cl.effectif << endl;
+                fluxo2 << "EFFECTIF LIMITE DE La CLASSE : " << cl.seuilEffectif << endl;
+                fluxo2 << "---------------------------------------"<< endl;
+
+                p=p->next;
+            }
+            cout <<endl;
+
+
+        //"""""
+
 
         cout << "Classes enregistree dans le fichier: " <<fichierClasse <<endl;
     }
@@ -356,6 +417,145 @@ void saveFileClasse(vector<Classe> &vecClasse){
     {
         cout << "ERREUR: Impossible d'ouvrir le fichier." << endl;
     }
+
+}
+
+
+
+// ################################################################################################
+
+
+
+
+
+
+
+//
+//      monodirectional list
+//
+
+
+void listemono::initialise(){
+    T=0;
+    Q=0;
+    taille=0;
+}
+
+bool listemono::isVide(){
+    if(T==0 && Q==0)
+        return true;
+    else
+        return false;
+}
+
+void listemono::add(Classe c){
+    elementmono pc = new eltmono;
+    pc->info=c;
+    pc->next=0;
+    if(isVide()){
+        T=pc;
+    }else{
+        Q->next=pc;
+    }
+     Q=pc;
+     taille++;
+}
+
+void listemono::show(){
+    elementmono p;
+    if(isVide()){
+        cout << "la liste est vide";
+    }else{
+        p=T;
+        while(p){
+            afficherClasse(p->info);
+            p=p->next;
+        }
+        cout <<endl;
+
+
+    }
+}
+
+listemono::listemono(){}
+listemono::~listemono(){}
+
+
+
+
+
+//
+//      bidirectionnal list
+//
+
+listebi::listebi(){}
+listebi::~listebi(){}
+void listebi::initialise(){
+    T=0;
+    Q=0;
+    taille=0;
+}
+
+bool listebi::isVide(){
+    if(T==0 && Q==0)
+        return true;
+    else
+        return false;
+}
+
+
+void listebi::add(Etudiant e){
+    elementbi pc = new eltbi;
+    pc->info=e;
+    pc->next=0;
+    pc->prec=0;
+    if(isVide()){
+        T=pc;
+    }else{
+        Q->next=pc;
+        pc->prec=Q;
+
+
+    }
+     Q=pc;
+     taille++;
+}
+
+void listebi::show(){
+    elementbi p;
+    if(isVide()){
+        cout << "la liste est vide";
+    }else{
+        p=T;
+        while(p){
+                afficherEtudiant(p->info);
+            p=p->next;
+        }
+        cout <<endl;
+
+
+    }
+}
+
+
+
+Classe getclassebyid(listemono * lm, int idcl){
+
+    elementmono p;
+    if(lm->isVide()){
+        cout << "la liste est vide";
+    }else{
+        p=lm->T;
+        while(p){
+                if(idcl == p->info.id)
+                    return p->info;
+            p=p->next;
+        }
+        cout <<endl;
+
+
+    }
+    //il ne peut pas ne pas le trouver
 
 }
 
