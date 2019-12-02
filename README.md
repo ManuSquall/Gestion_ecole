@@ -15,8 +15,8 @@ le projet permet entre autre de:
 A chaque exécution du programme :
 
 - les id des étudiants et des classes sont stockés dans un fichier: "fichiers/fichierId.txt"
-- lors de l'ajout d'une classe, ces dernières sont sauvegardés sans le fichier: "fichiers/fichierClasse.txt"
-- lors de l'ajout d'un étudiant, l'ensemble de ses derniers sont sauvegardés sur un fichier: "fichiers/fichierEtudiant.txt"
+- lors de l'ajout d'une classe, ces dernières sont sauvegardés dans le fichier: "fichiers/fichierClasse.txt"
+- lors de l'ajout d'un étudiant, l'ensemble de ses derniers sont sauvegardés dans un fichier: "fichiers/fichierEtudiant.txt"
 - si les fichiers d'id, de classe et d'étudiants existaient deja, LEUR CONTENU EST ECRASE
 - pour CONSERVER leur anciens contenu :
 dans le fichier ecole.cpp
@@ -27,3 +27,5 @@ décommentez la ligne 161 et commentez la ligns 162 pour conserver le fichier de
 
 
 ## A NOTER QU'UN DOSSIER "fichiers" DOIT SE TROUVER AU SEIN DU PROJET POUR STOCKER LES FICHIERS
+
+#### Projet fait à la "va vite" 😅 donc forcément pas optimisé 😑
