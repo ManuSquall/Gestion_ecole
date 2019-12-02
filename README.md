@@ -1,6 +1,6 @@
 # Bonjour!
 
-### Ceci est un projet de gestion de classe en C++ se basant sur les concepts de structures, fonctions, boucles, tableau, fichiers.
+### Ceci est un projet de gestion de classe en C++ se basant sur les concepts de structures, fonctions, boucles, tableau, fichiers, listes, classe 😫
 
 
 
